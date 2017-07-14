@@ -1,12 +1,12 @@
 <div class="container">
   <div class="row">
-    <button class="btn btn-primary col-md-2 col-md-offset-10" (click)="staticModal.show()">Add student</button>
+    <button class="btn btn-primary col-md-2 col-md-offset-10" (click)="staticModal.show();">Add student</button>
 
-    <div class="modal fade" #staticModal="bs-modal" bsModal  [config]="{backdrop: 'static'}" tabindex="-1">
-      <app-popup [staticModal]="staticModal"></app-popup>
+    <div class="modal fade" #staticModal="bs-modal" bsModal>
+      <app-popup [staticModal]="staticModal" student="selectedStudent"></app-popup>
     </div>
 
-    <table class="table table-striped col-md-8" *ngIf="students.length">
+    <table class="table table-striped col-md-8" *ngIf="students.length; else noStudents">
         <thead>
           <tr>
             <th class="col-md-2">Id</th>
@@ -24,7 +24,7 @@
             <td>{{student.faculty}}</td>
             <td>{{student.courses}}</td>
             <td>
-              <button class="btn btn-primary">Edit</button>
+              <button class="btn btn-primary" (click)="selectedStudent=student; staticModal.show();">Edit</button>
             </td>
             <td>
               <button class="btn btn-danger" (click)="onDeleteStudent(student)">Delete</button>
@@ -32,8 +32,8 @@
           </tr>
         </tbody>
       </table>
-      <div class="col-md-8" *ngIf="!students.length">
+      <ng-template class="col-md-8" #noStudents>
         No students
-      </div>
+      </ng-template>
   </div>
 </div>

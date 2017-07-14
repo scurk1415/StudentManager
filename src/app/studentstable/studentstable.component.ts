@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import { Student } from '../../models/student'
+import { Student } from '../../models/student';
 
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PopupComponent} from '../popup/popup.component';
@@ -11,8 +11,10 @@ import {PopupComponent} from '../popup/popup.component';
   styleUrls: ['./studentstable.component.css']
 })
 export class StudentstableComponent implements OnInit {
-
+  
   public students: Student[] = [];
+  public selectedStudent: Student;
+
   constructor(private _dataSvc: DataService) { }
 
   ngOnInit() {
