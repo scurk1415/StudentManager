@@ -1,0 +1,11 @@
+prepare a single page web application which is about student register page.
+ 
+students have name,surname,department,faculty,student number,courses,phone number,address
+ 
+system should register new students, search students by student name or faculty name, department name,courses name
+ 
+system should edit or delete students information.
+ 
+system should show student detail
+ 
+use dynamic server side rendering table and this table must have sorting,filtering,pagination features.

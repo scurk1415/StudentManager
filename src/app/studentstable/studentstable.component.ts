@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../data.service';
+import { Student } from '../../models/student'
+
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PopupComponent} from '../popup/popup.component';
 
 @Component({
   selector: 'app-studentstable',
@@ -7,9 +12,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StudentstableComponent implements OnInit {
 
-  constructor() { }
+  public students: Student[] = [];
+  constructor(private _dataSvc: DataService) { }
 
   ngOnInit() {
+    this.students = this._dataSvc.getStudents();
+    console.log(this.students);
+  }
+
+  onDeleteStudent(student: Student){
+    this._dataSvc.deleteStudent(student);
   }
 
 }

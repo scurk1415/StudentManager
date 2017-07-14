@@ -6,17 +6,26 @@ import { HeaderComponent } from './header/header.component';
 import { StudentstableComponent } from './studentstable/studentstable.component';
 import { SearchComponent } from './search/search.component';
 
+import { ModalModule } from 'ngx-bootstrap';
+
+
+import { DataService } from './data.service';
+import { PopupComponent } from './popup/popup.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     StudentstableComponent,
-    SearchComponent
+    SearchComponent,
+    PopupComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    ModalModule.forRoot()
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [DataService],
+  bootstrap: [AppComponent],
+  entryComponents: [PopupComponent],
 })
 export class AppModule { }
