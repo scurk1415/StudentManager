@@ -7,11 +7,16 @@ import { HeaderComponent } from './header/header.component';
 import { StudentstableComponent } from './studentstable/studentstable.component';
 import { SearchComponent } from './search/search.component';
 
-import { ModalModule } from 'ngx-bootstrap';
-
+import { ModalModule, BsDropdownModule, PaginationModule } from 'ngx-bootstrap';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 import { DataService } from './data.service';
 import { PopupComponent } from './popup/popup.component';
+import { ViewPopupComponent } from './view-popup/view-popup.component';
+import { DepartmentPipe } from './department.pipe';
+import { FacultynamePipe } from './facultyname.pipe';
+import { CourseNamesPipe } from './course-names.pipe';
+import { DepartmentNamePipe } from './department-name.pipe';
 
 @NgModule({
   declarations: [
@@ -19,11 +24,19 @@ import { PopupComponent } from './popup/popup.component';
     HeaderComponent,
     StudentstableComponent,
     SearchComponent,
-    PopupComponent
+    PopupComponent,
+    ViewPopupComponent,
+    DepartmentPipe,
+    FacultynamePipe,
+    CourseNamesPipe,
+    DepartmentNamePipe
   ],
   imports: [
     BrowserModule,
     ModalModule.forRoot(),
+    BsDropdownModule.forRoot(),
+    PaginationModule.forRoot(),
+    MultiselectDropdownModule,
     FormsModule
   ],
   providers: [DataService],
