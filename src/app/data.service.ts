@@ -56,7 +56,7 @@ export class DataService {
   public studentsChanged = new EventEmitter<Student[]>();
 
   constructor() { 
-    //this.data = JSON.parse(sessionStorage.getItem("student")) || [];
+    this.data = JSON.parse(sessionStorage.getItem("student")) || [];
   }
 
   getStudents(){

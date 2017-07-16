@@ -17,6 +17,7 @@ import { Course } from "../../models/Course";
 })
 export class StudentstableComponent implements OnInit, OnDestroy {
   
+  @ViewChild("staticModal") staticModal;
   students: Student[] = [];
   faculties: Faculty[] = [];
   departments: Department[] = [];
@@ -116,6 +117,12 @@ export class StudentstableComponent implements OnInit, OnDestroy {
 
   onEditStudent(student: Student){
     this._dataSvc.startedEditing.next(student);
+    this.staticModal.show();
+  }
+
+  onAddStudent(){
+    this._dataSvc.startedEditing.next(new Student(null,"","","","",null,null));
+    this.staticModal.show();
   }
 
   onDeleteStudent(student: Student){

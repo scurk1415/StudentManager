@@ -20,6 +20,7 @@ export class PopupComponent implements OnInit, OnDestroy {
 
   @ViewChild('form') form: NgForm;
   @Input() staticModal;
+
   facultyHidden: string;
   subscription: Subscription;
   isEditMode: boolean = false;
@@ -48,7 +49,7 @@ export class PopupComponent implements OnInit, OnDestroy {
       allSelected: 'All selected',
   };
 
-  optionsModel: number[];
+  optionsModel: number[] = [];
 
   constructor(private _dataSvc: DataService) { }
 
@@ -59,8 +60,7 @@ export class PopupComponent implements OnInit, OnDestroy {
     this.subscription = this._dataSvc.startedEditing.subscribe((student: Student) => {
       this.isEditMode = true;
       this.editedStudent = student;
-      console.log(student);
-      this.optionsModel = student.courses;
+      
       this.form.setValue({
         student_number: student.student_number,
         name: student.name,
@@ -71,13 +71,23 @@ export class PopupComponent implements OnInit, OnDestroy {
         department : student.department || "",
         courses : student.courses || []
       });
+
+      this.optionsModel = student.courses;
     });
   }
 
   onSubmit(form: NgForm){
-    console.log(form);
     if(this.isEditMode){
-      this.editedStudent.update(form);
+      //could be moved to model
+      this.editedStudent.student_number = form.value.student_number;
+      this.editedStudent.name = form.value.name;
+      this.editedStudent.surname = form.value.surname;
+      this.editedStudent.phone_number = form.value.phone_number;
+      this.editedStudent.address = form.value.address;
+      this.editedStudent.department = form.value.department;
+      this.editedStudent.faculty = form.value.faculty;
+      this.editedStudent.courses = form.value.courses;
+
       this._dataSvc.editStudent(this.editedStudent);
     }
     else{
@@ -85,8 +95,6 @@ export class PopupComponent implements OnInit, OnDestroy {
       this._dataSvc.addStudent(student);
     }
 
-    this.form.reset();
-    this.isEditMode = false;
     this.closePopup();
   }
 
@@ -103,6 +111,8 @@ export class PopupComponent implements OnInit, OnDestroy {
   }
 
   closePopup(){
+    this.form.reset();
+    this.isEditMode = false;
     this.staticModal.hide();
   }
 
