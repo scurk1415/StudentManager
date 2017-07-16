@@ -12,7 +12,7 @@ Once installed you must install all packages with:
 npm install
 ```
 
-after everyrhing is installed run:
+After everything is installed run:
 
 ```
 npm start
