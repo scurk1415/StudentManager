@@ -1,7 +1,7 @@
   <div class="container">
     <form class="row">
       <div class="form-group col-md-8 col-md-offset-2">
-        <input type="text" class="form-control" placeholder="Search by name, faculty, department or course">
+        <input type="text" class="form-control" (keyup)="textChanged(filter.value)" #filter placeholder="Search by name, faculty, department or course">
       </div>
     </form>
   </div>

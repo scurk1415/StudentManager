@@ -1,3 +1,5 @@
+
+<app-search (filterChanged)="onFilterChange($event)"></app-search>
 <div class="container">
   <div class="row">
     <button class="btn btn-primary col-md-2 col-md-offset-10" (click)="staticModal.show();">Add student</button>
@@ -14,11 +16,7 @@
       <table class="table table-striped col-md-8">
         <thead>
           <tr>
-            <th class="col-md-2">Student number</th>
-            <th class="col-md-2">Name</th>
-            <th class="col-md-2">Faculty</th>
-            <th class="col-md-4">Courses</th>
-            <th class="col-md-2"></th>
+            <th [class]="column.class" *ngFor="let column of sortConfig" (click)="onSort(column);">{{column.title}}</th>
           </tr>
         </thead>
         <tbody>
@@ -26,6 +24,7 @@
             <td>{{student.student_number}}</td>
             <td>{{student.name +" "+ student.surname}}</td>
             <td>{{student.faculty | facultyname:faculties }}</td>
+            <td>{{student.department | departmentName:departments }}</td>
             <td>{{student.courses | courseNames:courses }}</td>
             <td>
               <button class="btn btn-warning" (click)="onViewStudent(student); viewModal.show();"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>

@@ -1,3 +1,4 @@
+import { Department } from './../../models/Department';
 import { Faculty } from './../../models/Faculty';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
@@ -18,6 +19,7 @@ export class StudentstableComponent implements OnInit, OnDestroy {
   
   students: Student[] = [];
   faculties: Faculty[] = [];
+  departments: Department[] = [];
   courses: Course[] = [];
   selectedStudent: Student;
   bigCurrentPage:number = 1;
@@ -25,22 +27,91 @@ export class StudentstableComponent implements OnInit, OnDestroy {
   rows;
   itemsPerPage:number = 5;
 
+  sortConfig = [
+    { title:'Student number', class:'col-md-2', canSort: true, sortProperty:'student_number',sortDirection:'asc'},
+    { title:'Name', class:'col-md-2', canSort: true, sortProperty:'name',sortDirection:'asc'},
+    { title:'Faculty', class:'col-md-2', canSort: true, sortProperty:'faculty',sortDirection:'asc'},
+    { title:'Department', class:'col-md-2', canSort: true, sortProperty:'department',sortDirection:'asc'},
+    { title:'Courses', class:'col-md-2', canSort: false},
+    { title:'', class:'col-md-2', canSort: false}
+  ];
   subscription: Subscription;
+  searchFilter: string = "";
 
   constructor(private _dataSvc: DataService) { }
 
   ngOnInit() {
     this.students = this._dataSvc.getStudents();
     this.faculties = this._dataSvc.faculties;
+    this.departments = this._dataSvc.departments;
     this.courses = this._dataSvc.courses;
     
     this.onPageChange({page: this.bigCurrentPage, itemsPerPage: this.itemsPerPage});
 
-    this._dataSvc.studentsChanged.subscribe(
+    this.subscription = this._dataSvc.studentsChanged.subscribe(
       (students: Student[])=> {
         this.onPageChange({page: this.bigCurrentPage, itemsPerPage: this.itemsPerPage});
       }
     );
+  }
+
+  onFilterChange(value: string){
+    value = value.toLowerCase();
+    this.searchFilter = value;
+
+    let data = this.students.filter(student => {
+      //can be switched with indexOf if we want to check if the property contains the value (now we check if its starts with)
+      return student.student_number.toString().startsWith(value) || 
+            student.name.toLowerCase().startsWith(value) ||
+            student.surname.toLowerCase().startsWith(value) ||
+            this.faculties.find(faculty => faculty.name.toLowerCase().startsWith(value) && faculty.id == student.faculty) ||
+            this.departments.find(dep => dep.name.toLowerCase().startsWith(value) && dep.id == student.department) ||
+            this.courses.find(course => course.name.toLowerCase().startsWith(value) && student.courses.indexOf(course.id) >-1);
+    });
+
+    this.onPageChange({page: this.bigCurrentPage, itemsPerPage: this.itemsPerPage}, data, true);
+    return data;
+  }
+
+  onSort(columnConfig: any){
+    if(columnConfig.canSort){
+      const data = this.onFilterChange(this.searchFilter);
+      
+      let sortedData = this.changeSort(data, columnConfig);
+      console.log(sortedData);
+
+      switch (columnConfig.sortDirection) {
+        case 'desc':
+          columnConfig.sortDirection = 'asc';
+          break;
+      
+        default:
+          columnConfig.sortDirection = 'desc';
+          break;
+      }
+
+      this.onPageChange({page: this.bigCurrentPage, itemsPerPage: this.itemsPerPage},sortedData, true);
+    }
+  }
+
+  changeSort(data, config){
+
+    return data.sort((previous:any, current:any) => {
+      let nameA = previous[config.sortProperty].toString().toUpperCase(); // ignore upper and lowercase
+      let nameB = current[config.sortProperty].toString().toUpperCase(); // ignore upper and lowercase
+      console.log(nameA);
+
+      let sort:string = config.sortDirection;
+      //
+
+      if (nameA > nameB) {
+        return sort === 'desc' ? -1 : 1;
+      } else if (nameA < nameB) {
+        return sort === 'asc' ? -1 : 1;
+      }
+      return 0;
+    });
+
   }
 
   onViewStudent(student: Student){
@@ -55,12 +126,16 @@ export class StudentstableComponent implements OnInit, OnDestroy {
     this._dataSvc.deleteStudent(student);
   }
 
-  onPageChange(page:any) {
-      let start = (page.page - 1) * page.itemsPerPage;
-      let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : this.students.length;
-      this.rows = this.students.slice(start, end);
-  }
+  onPageChange(page:any, data?: Student[], forceData?: boolean) {
+    var array = this.students;
+    if(forceData){
+      array = data;
+    }
 
+    let start = (page.page - 1) * page.itemsPerPage;
+    let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : array.length;
+    this.rows = array.slice(start, end);
+  }
 
   ngOnDestroy(){
     this.subscription.unsubscribe();

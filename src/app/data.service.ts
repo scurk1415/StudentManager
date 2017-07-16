@@ -9,7 +9,8 @@ import { Subject } from "rxjs/Subject";
 export class DataService {
   public data: Student[] = [
     new Student(123, "test", "tester","das","home",1,1,[1]), 
-    new Student(124, "somebody","else","0514684230","somewhere",1,1,[1,3])
+    new Student(124, "somebody","else","0514684230","somewhere",2,4,[7]),
+    new Student(125, "test2","else","0514684230","somewhere",2,4,[7])
   ];
 
   public faculties: Faculty[] = [
