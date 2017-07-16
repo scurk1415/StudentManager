@@ -2,7 +2,6 @@ import { NgForm } from '@angular/forms';
 import { Course } from './Course';
 
 export class Student{
-
     constructor(
         public student_number : number,
         public name: string,
@@ -18,6 +17,7 @@ export class Student{
     }
 
     public id: number;
+    public is_edit: boolean;
 
     update(form: NgForm){
         this.student_number = form.value.student_number;
@@ -28,5 +28,12 @@ export class Student{
         this.department = form.value.department;
         this.faculty = form.value.faculty;
         this.courses = form.value.courses;
+    }
+    
+    toThis(jsonStr: string) {
+        let jsonObj: any = JSON.parse(jsonStr);
+        for (let prop in jsonObj) {
+            this[prop] = jsonObj[prop];
+        }
     }
 }

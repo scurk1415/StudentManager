@@ -9,7 +9,6 @@ import { DataService } from './../data.service';
 import { Student } from '../../models/student';
 import { Faculty } from '../../models/Faculty';
 import { Course } from "../../models/Course";
-import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings } from "angular-2-dropdown-multiselect";
 
 @Component({
   selector: 'app-popup',
@@ -28,37 +27,20 @@ export class PopupComponent implements OnInit, OnDestroy {
   faculties: Faculty[]; 
   departments: Department[]; 
   courses: Course[]; 
-
-  myOptions: IMultiSelectOption[];
-
-  // Settings configuration
-  mySettings: IMultiSelectSettings = {
-      enableSearch: true,
-      buttonClasses: 'btn btn-default',
-      dynamicTitleMaxItems: 3
-  };
-
-  // Text configuration
-  myTexts: IMultiSelectTexts = {
-      checkAll: 'Select all',
-      uncheckAll: 'Unselect all',
-      checked: 'item selected',
-      checkedPlural: 'items selected',
-      searchPlaceholder: 'Find',
-      defaultTitle: 'Select',
-      allSelected: 'All selected',
-  };
-
-  optionsModel: number[] = [];
+  
+  public items;
+  private value;
+  public active = [];
 
   constructor(private _dataSvc: DataService) { }
 
   ngOnInit() {
     this.faculties = this._dataSvc.faculties;
     this.departments = this._dataSvc.departments;
+    this.courses = this._dataSvc.courses;
 
     this.subscription = this._dataSvc.startedEditing.subscribe((student: Student) => {
-      this.isEditMode = true;
+      this.isEditMode = student.is_edit;
       this.editedStudent = student;
       
       this.form.setValue({
@@ -72,7 +54,15 @@ export class PopupComponent implements OnInit, OnDestroy {
         courses : student.courses || []
       });
 
-      this.optionsModel = student.courses;
+      this.setCourses();
+      this.active = [];
+      this.courses.forEach(course => { 
+        if(student.courses.indexOf(course.id) > -1){
+          this.active.push({ id: course.id, text: course.name});
+        }
+      });
+
+      console.log(this.active);
     });
   }
 
@@ -86,12 +76,13 @@ export class PopupComponent implements OnInit, OnDestroy {
       this.editedStudent.address = form.value.address;
       this.editedStudent.department = form.value.department;
       this.editedStudent.faculty = form.value.faculty;
-      this.editedStudent.courses = form.value.courses;
+      this.editedStudent.courses = this.value.map(item => item.id);
 
+      console.log(this.editedStudent.courses);
       this._dataSvc.editStudent(this.editedStudent);
     }
     else{
-      const student = new Student(form.value.student_number, form.value.name,form.value.surname,form.value.phone_number,form.value.address, form.value.faculty, form.value.department, form.value.courses);
+      const student = new Student(form.value.student_number, form.value.name,form.value.surname,form.value.phone_number,form.value.address, form.value.faculty, form.value.department, this.value.map(item => item.id));
       this._dataSvc.addStudent(student);
     }
 
@@ -101,13 +92,31 @@ export class PopupComponent implements OnInit, OnDestroy {
   clearDepartment(){
     this.form.controls['department'].setValue("");
     this.form.controls['courses'].setValue([]);
+    this.active = [];
+  }
+
+  refreshValue(value:any):void {
+    this.value = value;
+    let ints = this.value.map(val => val.id);
+    this.form.controls['courses'].setValue([ints]);
   }
 
   changeCourses(){
     this.form.controls['courses'].setValue([]);
+    this.active = [];
     if(this.form.value.department){
-      this.myOptions = this._dataSvc.courses.filter(course => course.department_id == this.form.value.department);
+      this.setCourses();
     }
+  }
+
+  setCourses(){
+    this.items = [];
+    
+    this.items = this._dataSvc.courses.map(course => {
+      if(course.department_id == this.form.value.department){
+        return {id: course.id, text: course.name};
+      }
+    });
   }
 
   closePopup(){

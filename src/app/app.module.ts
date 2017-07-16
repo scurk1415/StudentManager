@@ -8,7 +8,6 @@ import { StudentstableComponent } from './studentstable/studentstable.component'
 import { SearchComponent } from './search/search.component';
 
 import { ModalModule, BsDropdownModule, PaginationModule } from 'ngx-bootstrap';
-import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 import { DataService } from './data.service';
 import { PopupComponent } from './popup/popup.component';
@@ -17,6 +16,8 @@ import { DepartmentPipe } from './department.pipe';
 import { FacultynamePipe } from './facultyname.pipe';
 import { CourseNamesPipe } from './course-names.pipe';
 import { DepartmentNamePipe } from './department-name.pipe';
+
+import {SelectModule} from 'ng2-select';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { DepartmentNamePipe } from './department-name.pipe';
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
     PaginationModule.forRoot(),
-    MultiselectDropdownModule,
+    SelectModule,
     FormsModule
   ],
   providers: [DataService],

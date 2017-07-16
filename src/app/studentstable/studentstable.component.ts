@@ -116,6 +116,7 @@ export class StudentstableComponent implements OnInit, OnDestroy {
   }
 
   onEditStudent(student: Student){
+    student.is_edit = true;
     this._dataSvc.startedEditing.next(student);
     this.staticModal.show();
   }
@@ -127,6 +128,7 @@ export class StudentstableComponent implements OnInit, OnDestroy {
 
   onDeleteStudent(student: Student){
     this._dataSvc.deleteStudent(student);
+    this.onPageChange({page: this.bigCurrentPage, itemsPerPage: this.itemsPerPage});
   }
 
   onPageChange(page:any, data?: Student[], forceData?: boolean) {

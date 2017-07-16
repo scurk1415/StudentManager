@@ -55,15 +55,12 @@ export class DataService {
   public startedEditing = new Subject<Student>();
   public studentsChanged = new EventEmitter<Student[]>();
 
-  constructor() { 
+  constructor() {
     this.data = JSON.parse(sessionStorage.getItem("student")) || [];
   }
 
   getStudents(){
     //could be an HTTP call to the server, but I simplyfied it for this task
-    //let data = JSON.parse(sessionStorage.getItem("student")) || [];
-    //console.log(data);
-    //this.data = data;
     return this.data;
   }
   

@@ -100,19 +100,20 @@
             <div class=" form-group col-md-3" [hidden]="!dep.value">
               <label for="courses">Courses</label> 
               <div style="display: block;">
-                <ss-multiselect-dropdown [options]="myOptions" 
-                                        [texts]="myTexts" 
-                                        [settings]="mySettings"
-                                        name="courses"
-                                        [(ngModel)]="optionsModel">
-                </ss-multiselect-dropdown>
+                <input type="text" name="courses" ngModel style="display: none;">
+                <ng-select [multiple]="true"
+                          [items]="items"
+                          [active]="active"        
+                          (data)="refreshValue($event)"
+                          placeholder="Select course">
+                </ng-select>  
               </div>             
             </div>
           </div>
 
           <!-- submit -->
           <button type="submit" class="btn btn-primary" [disabled]="!form.valid">{{ isEditMode ? 'Update' : 'Add'}}</button>
-        </form>
+        </form>        
       </div>
     </div>
   </div>
