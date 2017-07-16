@@ -36,6 +36,7 @@ export class StudentstableComponent implements OnInit, OnDestroy {
     { title:'Courses', class:'col-md-2', canSort: false},
     { title:'', class:'col-md-2', canSort: false}
   ];
+  
   subscription: Subscription;
   searchFilter: string = "";
 

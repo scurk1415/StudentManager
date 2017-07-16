@@ -43,29 +43,32 @@ export class PopupComponent implements OnInit, OnDestroy {
       this.isEditMode = student.is_edit;
       this.editedStudent = student;
       
-      this.form.setValue({
-        student_number: student.student_number,
-        name: student.name,
-        surname : student.surname,
-        phone_number : student.phone_number,
-        address : student.address,
-        faculty : student.faculty || "",
-        department : student.department || "",
-        courses : student.courses || []
-      });
-
+      this.setForm(student);
       this.setCourses();
       this.active = [];
-      this.courses.forEach(course => { 
-        if(student.courses.indexOf(course.id) > -1){
-          this.active.push({ id: course.id, text: course.name});
-        }
-      });
-
-      console.log(this.active);
+      
+      if(student.courses){
+        this.courses.forEach(course => {
+          if(student.courses.indexOf(course.id) > -1){
+            this.active.push({ id: course.id, text: course.name});
+          }
+        });
+      }
     });
   }
 
+  setForm(student: Student){
+    this.form.setValue({
+      student_number: student.student_number,
+      name: student.name,
+      surname : student.surname,
+      phone_number : student.phone_number,
+      address : student.address,
+      faculty : student.faculty || "",
+      department : student.department || "",
+      courses : student.courses || []
+    });
+  }
   onSubmit(form: NgForm){
     if(this.isEditMode){
       //could be moved to model
@@ -78,7 +81,6 @@ export class PopupComponent implements OnInit, OnDestroy {
       this.editedStudent.faculty = form.value.faculty;
       this.editedStudent.courses = this.value.map(item => item.id);
 
-      console.log(this.editedStudent.courses);
       this._dataSvc.editStudent(this.editedStudent);
     }
     else{
