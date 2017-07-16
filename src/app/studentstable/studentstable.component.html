@@ -16,7 +16,10 @@
       <table class="table table-striped col-md-8">
         <thead>
           <tr>
-            <th [class]="column.class" *ngFor="let column of sortConfig" (click)="onSort(column);">{{column.title}}</th>
+            <th [class]="column.class" *ngFor="let column of sortConfig" (click)="onSort(column);">
+              {{column.title}}
+              <span class="glyphicon grid" *ngIf="column.canSort" [ngClass]="{'glyphicon-triangle-bottom': column.sortDirection =='desc','glyphicon-triangle-top': column.sortDirection =='asc'}"></span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -46,8 +49,8 @@
       </div>
     </div>
     
-      <ng-template class="col-md-8" #noStudents>
-        No students
-      </ng-template>
+    <ng-template class="col-md-8" #noStudents>
+      No students
+    </ng-template>
   </div>
 </div>

@@ -78,7 +78,6 @@ export class StudentstableComponent implements OnInit, OnDestroy {
       const data = this.onFilterChange(this.searchFilter);
       
       let sortedData = this.changeSort(data, columnConfig);
-      console.log(sortedData);
 
       switch (columnConfig.sortDirection) {
         case 'desc':
@@ -97,12 +96,9 @@ export class StudentstableComponent implements OnInit, OnDestroy {
   changeSort(data, config){
 
     return data.sort((previous:any, current:any) => {
-      let nameA = previous[config.sortProperty].toString().toUpperCase(); // ignore upper and lowercase
-      let nameB = current[config.sortProperty].toString().toUpperCase(); // ignore upper and lowercase
-      console.log(nameA);
-
+      let nameA = previous[config.sortProperty]; // ignore upper and lowercase
+      let nameB = current[config.sortProperty]; // ignore upper and lowercase
       let sort:string = config.sortDirection;
-      //
 
       if (nameA > nameB) {
         return sort === 'desc' ? -1 : 1;
