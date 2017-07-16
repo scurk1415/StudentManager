@@ -1,8 +1,20 @@
 # Studentmanager
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.1.
+This project requires Angular-cli. To install it run:
 
-## Development server
+```
+npm install -g @angular/cli
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Once installed you must install all packages with:
+
+```
+npm install
+```
+
+after everyrhing is installed run:
+
+```
+npm start
+```
 
